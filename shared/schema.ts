@@ -10,6 +10,7 @@ export const cottages = pgTable("cottages", {
   price: integer("price").notNull(),
   capacity: integer("capacity").notNull(),
   imageUrl: text("image_url").notNull(),
+  images: text("images").array(),
   features: text("features").array(),
 });
 
@@ -18,6 +19,7 @@ export const activities = pgTable("activities", {
   title: text("title").notNull(),
   description: text("description").notNull(),
   imageUrl: text("image_url").notNull(),
+  images: text("images").array(),
 });
 
 export const inquiries = pgTable("inquiries", {

@@ -69,6 +69,11 @@ async function seedDatabase() {
       price: 12000,
       capacity: 2,
       imageUrl: "https://images.unsplash.com/photo-1587061949409-02df41d5e562?q=80&w=2070&auto=format&fit=crop",
+      images: [
+        "https://images.unsplash.com/photo-1587061949409-02df41d5e562?q=80&w=2070&auto=format&fit=crop",
+        "/images/classic_cottages-03.jpg",
+        "/images/classic_cottages-04.jpg"
+      ],
       features: ["King size bed", "Private verandah", "Attached stone bathroom", "Solar powered", "Fan cooled"],
     });
 
@@ -78,7 +83,12 @@ async function seedDatabase() {
       description: "Perfect for families or small groups, our mezzanine cottages offer extra space with a loft area. Built with the same eco-friendly materials and attention to detail.",
       price: 15000,
       capacity: 4,
-      imageUrl: "https://images.unsplash.com/photo-1449156493391-d2cfa28e468b?q=80&w=2072&auto=format&fit=crop",
+      imageUrl: "/images/mezzanine_cottages-04.jpg",
+      images: [
+        "/images/mezzanine_cottages-04.jpg",
+        "/images/mezzanine_cottages-01.jpg",
+        "/images/mezzanine_cottages-02.jpg"
+      ],
       features: ["King size bed", "Loft with twin beds", "Large verandah", "River view", "Spacious bathroom"],
     });
 
@@ -98,7 +108,11 @@ async function seedDatabase() {
     await storage.createActivity({
       title: "Khajuraho Temples",
       description: "Visit the UNESCO World Heritage western group of temples at Khajuraho, famous for their stunning Nagara-style architectural symbolism and erotic sculptures.",
-      imageUrl: "https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=1974&auto=format&fit=crop",
+      imageUrl: "/images/temple.jpg",
+      images: [
+        "/images/temple.jpg",
+        "/images/sculptures2.jpg"
+      ],
     });
 
     // Seed Testimonials
@@ -115,7 +129,7 @@ async function seedDatabase() {
       rating: 5,
       location: "Mumbai, India",
     });
-    
+
     console.log("Database seeded successfully.");
   }
 }

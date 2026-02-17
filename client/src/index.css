@@ -6,30 +6,37 @@
 
 :root {
   /* Earthy Luxury Palette */
-  --background: 40 33% 98%;      /* #FAF9F6 - Off-white/Cream */
-  --foreground: 140 10% 15%;     /* #222A25 - Dark Green/Black */
-  
-  --primary: 142 28% 35%;        /* #407253 - Muted Forest Green */
+  --background: 40 33% 98%;
+  /* #FAF9F6 - Off-white/Cream */
+  --foreground: 140 10% 15%;
+  /* #222A25 - Dark Green/Black */
+
+  --primary: 142 28% 35%;
+  /* #407253 - Muted Forest Green */
   --primary-foreground: 40 33% 98%;
-  
-  --secondary: 34 30% 89%;       /* #EFDEC8 - Sand/Beige */
+
+  --secondary: 34 30% 89%;
+  /* #EFDEC8 - Sand/Beige */
   --secondary-foreground: 140 10% 15%;
-  
-  --muted: 34 20% 94%;           /* #F5F2EE */
-  --muted-foreground: 25 5% 45%; /* #787370 */
-  
-  --accent: 24 57% 50%;          /* #C87A47 - Terracotta/Clay */
+
+  --muted: 34 20% 94%;
+  /* #F5F2EE */
+  --muted-foreground: 25 5% 45%;
+  /* #787370 */
+
+  --accent: 24 57% 50%;
+  /* #C87A47 - Terracotta/Clay */
   --accent-foreground: 40 33% 98%;
-  
+
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
-  
+
   --border: 140 10% 85%;
   --input: 140 10% 85%;
   --ring: 142 28% 35%;
-  
+
   --radius: 0.25rem;
-  
+
   --font-serif: 'Playfair Display', serif;
   --font-sans: 'DM Sans', sans-serif;
 }
@@ -38,11 +45,25 @@
   * {
     @apply border-border;
   }
+
+  html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased selection:bg-primary/20;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+    width: 100%;
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-serif font-medium tracking-tight;
   }
 }
@@ -51,17 +72,12 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .container-padding {
     @apply px-4 sm:px-6 lg:px-8;
   }
-  
+
   .section-padding {
     @apply py-16 md:py-24 lg:py-32;
   }
-}
-
-/* Smooth scrolling for anchor links */
-html {
-  scroll-behavior: smooth;
 }

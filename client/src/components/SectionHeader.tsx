@@ -9,10 +9,10 @@ interface SectionHeaderProps {
   light?: boolean;
 }
 
-export function SectionHeader({ 
-  subtitle, 
-  title, 
-  description, 
+export function SectionHeader({
+  subtitle,
+  title,
+  description,
   centered = true,
   className,
   light = false
@@ -24,8 +24,7 @@ export function SectionHeader({
       className
     )}>
       <span className={cn(
-        "text-xs font-bold uppercase tracking-[0.2em] mb-3 block",
-        light ? "text-accent" : "text-accent"
+        "text-xs font-bold uppercase tracking-[0.2em] mb-3 block text-accent",
       )}>
         {subtitle}
       </span>

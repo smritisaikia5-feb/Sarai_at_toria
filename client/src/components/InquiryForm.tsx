@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 export function InquiryForm() {
   const mutation = useSubmitInquiry();
-  
+
   const form = useForm<InsertInquiry>({
     resolver: zodResolver(insertInquirySchema),
     defaultValues: {
@@ -57,7 +57,7 @@ export function InquiryForm() {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="email"
@@ -95,12 +95,13 @@ export function InquiryForm() {
                 <FormItem>
                   <FormLabel>Number of Guests</FormLabel>
                   <FormControl>
-                    <Input 
-                      type="number" 
-                      min={1} 
+                    <Input
+                      type="number"
+                      min={1}
                       {...field}
-                      onChange={e => field.onChange(parseInt(e.target.value))} 
-                      className="bg-muted/30 border-border/50 focus:bg-white transition-colors h-12" 
+                      value={field.value ?? ''}
+                      onChange={e => field.onChange(parseInt(e.target.value))}
+                      className="bg-muted/30 border-border/50 focus:bg-white transition-colors h-12"
                     />
                   </FormControl>
                   <FormMessage />
@@ -202,10 +203,10 @@ export function InquiryForm() {
               <FormItem>
                 <FormLabel>Message / Special Requests</FormLabel>
                 <FormControl>
-                  <Textarea 
-                    placeholder="Tell us about your trip plans..." 
-                    className="resize-none min-h-[120px] bg-muted/30 border-border/50 focus:bg-white transition-colors" 
-                    {...field} 
+                  <Textarea
+                    placeholder="Tell us about your trip plans..."
+                    className="resize-none min-h-[120px] bg-muted/30 border-border/50 focus:bg-white transition-colors"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -213,8 +214,8 @@ export function InquiryForm() {
             )}
           />
 
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             className="w-full h-14 text-lg font-serif italic bg-primary hover:bg-primary/90 text-white"
             disabled={mutation.isPending}
           >

@@ -1,0 +1,4 @@
+﻿client/src/components/InquiryForm.tsx(98,22): error TS2322: Type '{ onChange: (e: ChangeEvent<HTMLInputElement>) => void; className: string; onBlur: Noop; value: number | null | undefined; disabled?: boolean | undefined; name: "guests"; ref: RefCallBack; type: "number"; min: number; }' is not assignable to type 'Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">'.
+  Types of property 'value' are incompatible.
+    Type 'number | null | undefined' is not assignable to type 'string | number | readonly string[] | undefined'.
+      Type 'null' is not assignable to type 'string | number | readonly string[] | undefined'.

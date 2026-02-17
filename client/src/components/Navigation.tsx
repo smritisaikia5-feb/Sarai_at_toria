@@ -126,7 +126,7 @@ export function Navigation() {
                     </Button>
                   </Link>
                 </nav>
-                
+
                 <div className="mt-auto mb-10 text-muted-foreground text-sm space-y-2">
                   <p>Toria, District Chhatarpur</p>
                   <p>Madhya Pradesh, 471101, India</p>

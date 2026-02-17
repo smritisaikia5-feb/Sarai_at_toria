@@ -65,4 +65,70 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+export class MemStorage implements IStorage {
+  private cottages: Map<number, Cottage>;
+  private activities: Map<number, Activity>;
+  private inquiries: Map<number, Inquiry>;
+  private testimonials: Map<number, Testimonial>;
+  private currentCottageId: number;
+  private currentActivityId: number;
+  private currentInquiryId: number;
+  private currentTestimonialId: number;
+
+  constructor() {
+    this.cottages = new Map();
+    this.activities = new Map();
+    this.inquiries = new Map();
+    this.testimonials = new Map();
+    this.currentCottageId = 1;
+    this.currentActivityId = 1;
+    this.currentInquiryId = 1;
+    this.currentTestimonialId = 1;
+  }
+
+  async getCottages(): Promise<Cottage[]> {
+    return Array.from(this.cottages.values());
+  }
+
+  async getCottage(id: number): Promise<Cottage | undefined> {
+    return this.cottages.get(id);
+  }
+
+  async createCottage(insertCottage: InsertCottage): Promise<Cottage> {
+    const id = this.currentCottageId++;
+    const cottage: Cottage = { ...insertCottage, id };
+    this.cottages.set(id, cottage);
+    return cottage;
+  }
+
+  async getActivities(): Promise<Activity[]> {
+    return Array.from(this.activities.values());
+  }
+
+  async createActivity(insertActivity: InsertActivity): Promise<Activity> {
+    const id = this.currentActivityId++;
+    const activity: Activity = { ...insertActivity, id };
+    this.activities.set(id, activity);
+    return activity;
+  }
+
+  async createInquiry(insertInquiry: InsertInquiry): Promise<Inquiry> {
+    const id = this.currentInquiryId++;
+    const inquiry: Inquiry = { ...insertInquiry, id, createdAt: new Date() };
+    this.inquiries.set(id, inquiry);
+    return inquiry;
+  }
+
+  async getTestimonials(): Promise<Testimonial[]> {
+    return Array.from(this.testimonials.values());
+  }
+
+  async createTestimonial(insertTestimonial: InsertTestimonial): Promise<Testimonial> {
+    const id = this.currentTestimonialId++;
+    const testimonial: Testimonial = { ...insertTestimonial, id };
+    this.testimonials.set(id, testimonial);
+    return testimonial;
+  }
+}
+
+export const storage = process.env.DATABASE_URL ? new DatabaseStorage() : new MemStorage();
