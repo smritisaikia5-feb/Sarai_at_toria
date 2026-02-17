@@ -68,15 +68,20 @@ app.use((req, res, next) => {
 
     console.error("Internal Server Error:", err);
 
-    if (res.headersSent) {
-      return next(err);
-    }
-
-    return res.status(status).json({ message });
+    res.status(status).json({ message });
+    throw err;
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
+  // In production, serve the static files from the dist folder
+  // In development, use Vite's middleware to serve the files
+  // This is so that we don't have to build the client in development
+  // and the production build can be deployed to a static hosting service
+  // without having to worry about the client being served by the server
+  // and the server being served by the client, which would cause a conflict
+  // and the server would not be able to serve the client because the client
+  // would be trying to serve the server, which would cause a conflict and
+  // the server would not be able to serve the client because the client
+  // would be trying to serve the server, which would cause a conflict and
   // doesn't interfere with the other routes
   if (process.env.NODE_ENV === "production") {
     serveStatic(app);
@@ -85,19 +90,25 @@ app.use((req, res, next) => {
     await setupVite(httpServer, app);
   }
 
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || "5000", 10);
-  httpServer.listen(
-    {
-      port,
-      host: "0.0.0.0",
-      reusePort: true,
-    },
-    () => {
-      log(`serving on port ${port}`);
-    },
-  );
+  // Only start the server if not in Vercel environment
+  if (!process.env.VERCEL) {
+    // ALWAYS serve the app on the port specified in the environment variable PORT
+    // Other ports are firewalled. Default to 5000 if not specified.
+    // this serves both the API and the client.
+    // It is the only port that is not firewalled.
+    const port = parseInt(process.env.PORT || "5000", 10);
+    httpServer.listen(
+      {
+        port,
+        host: "0.0.0.0",
+        reusePort: true,
+      },
+      () => {
+        log(`serving on port ${port}`);
+      },
+    );
+  }
 })();
+
+// Export for Vercel serverless
+export default app;
