@@ -9,7 +9,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-6">
             <div>
-              <img src="/images/logo.png" alt="The Sarai at Toria Logo" className="h-16 w-auto mb-4 brightness-0 invert opacity-90" />
+              <img src="/images/logo.png" alt="The Sarai at Toria Logo" className="h-20 w-auto mb-4 object-contain" />
               <h3 className="text-2xl font-serif font-bold">The Sarai at Toria</h3>
               <p className="text-sm text-primary-foreground/70 uppercase tracking-widest mt-1">Luxury Eco Lodge</p>
             </div>
