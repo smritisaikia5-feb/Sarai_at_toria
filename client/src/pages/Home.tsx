@@ -23,8 +23,28 @@ export default function Home() {
   const { data: cottages, isLoading: cottagesLoading } = useCottages();
   const { data: testimonials } = useTestimonials();
 
-  // Carousel state
+  // Hero carousel state
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Bird photo carousel state
+  const birdImages = [
+    { src: "https://images.unsplash.com/photo-1444464666168-49d633b86797?q=80&w=2669&auto=format&fit=crop", alt: "Kingfisher bird in nature" },
+    { src: "/images/bird-longtailed.jpg", alt: "Long-tailed shrike bird" },
+    { src: "/images/golden_oriole.jpg", alt: "Golden oriole bird" },
+    { src: "/images/rosefinch.jpg", alt: "Rosefinch bird" },
+    { src: "/images/open_billed_storks.jpg", alt: "Open-billed storks by the river" },
+  ];
+  const [birdIndex, setBirdIndex] = useState(0);
+  const prevBird = (e: React.MouseEvent) => { e.stopPropagation(); setBirdIndex((prev) => (prev - 1 + birdImages.length) % birdImages.length); };
+  const nextBird = (e: React.MouseEvent) => { e.stopPropagation(); setBirdIndex((prev) => (prev + 1) % birdImages.length); };
+
+  // Bird carousel auto-rotation every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBirdIndex((prev) => (prev + 1) % birdImages.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [birdImages.length]);
 
   // Carousel timer - change image every 5 seconds when video is not playing
   useEffect(() => {
@@ -88,9 +108,9 @@ export default function Home() {
           ) : (
             <>
               {/* Vimeo video player */}
-              <div className="absolute inset-0 w-full h-full overflow-hidden">
+              <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
                 <iframe
-                  src="https://player.vimeo.com/video/319473245?autoplay=1&byline=0&title=0&muted=1"
+                  src="https://player.vimeo.com/video/319473245?background=1"
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh]"
                   frameBorder="0"
                   allow="autoplay; fullscreen; picture-in-picture"
@@ -188,13 +208,41 @@ export default function Home() {
       <section className="section-padding container-padding">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative p-4">
-            {/* Unsplash image: 'safari couple sitting' or 'nature resort interior' */}
-            <div className="aspect-[4/5] overflow-hidden rounded-lg shadow-2xl relative z-10 border-4 border-accent/20 box-border">
+            {/* Bird photo carousel */}
+            <div className="aspect-[16/10] rounded-lg shadow-2xl relative z-10 border-4 border-accent/20 box-border group overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1444464666168-49d633b86797?q=80&w=2669&auto=format&fit=crop"
-                alt="Colorful bird in nature"
-                className="w-full h-full object-cover"
+                key={birdIndex}
+                src={birdImages[birdIndex].src}
+                alt={birdImages[birdIndex].alt}
+                className="w-full h-full object-cover transition-all duration-700"
               />
+              {/* Prev button */}
+              <button
+                onClick={prevBird}
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-black/70 text-white rounded-full w-9 h-9 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xl font-bold"
+                aria-label="Previous bird image"
+              >
+                &#8249;
+              </button>
+              {/* Next button */}
+              <button
+                onClick={nextBird}
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-black/70 text-white rounded-full w-9 h-9 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xl font-bold"
+                aria-label="Next bird image"
+              >
+                &#8250;
+              </button>
+              {/* Dots */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+                {birdImages.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={(e) => { e.stopPropagation(); setBirdIndex(i); }}
+                    className={`w-1.5 h-1.5 rounded-full transition-all ${i === birdIndex ? 'bg-white scale-125' : 'bg-white/50'}`}
+                    aria-label={`Go to bird image ${i + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
           <div>
@@ -207,11 +255,11 @@ export default function Home() {
             <p className="text-muted-foreground text-lg leading-relaxed mb-8">
               Here, sustainability isn't just a buzzword—it's our way of life. From earth-walled cottages to solar power and locally sourced cuisine, every detail connects you to the earth while wrapping you in understated luxury.
             </p>
-            <Link href="/about">
+            <a href="/about">
               <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white px-8 h-12">
                 Read Our Story
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
       </section >
@@ -267,27 +315,29 @@ export default function Home() {
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
             {[
-              { title: "Tiger Safari", desc: "Explore Panna Tiger Reserve with expert naturalists.", icon: "🐾" },
-              { title: "River Boat Ride", desc: "Drift along the Ken River spotting birds and crocodiles.", icon: "🛶" },
-              { title: "Khajuraho Temples", desc: "Visit the UNESCO World Heritage erotic temples nearby.", image: "/images/temple.jpg", icon: "🏛️" },
-            ].map((item: { title: string; desc: string; icon: string; image?: string }, i) => (
+              { title: "Tiger Safari", desc: "Explore Panna Tiger Reserve with expert naturalists.", image: "/images/panna_jungle1.jpg", icon: "🐾", link: "/experiences#panna-jungle-safari" },
+              { title: "River Boat Ride", desc: "Drift along the Ken River spotting birds and crocodiles.", image: "/images/ken river 1.png", icon: "🛶", link: "/experiences#ken-river-boat-ride" },
+              { title: "Khajuraho Temples", desc: "Visit the UNESCO World Heritage erotic temples nearby.", image: "/images/temple.jpg", icon: "🏛️", link: "/experiences#khajuraho-temples" },
+            ].map((item: { title: string; desc: string; icon: string; image?: string, link: string }, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2 }}
-                className="bg-white p-8 rounded-lg shadow-sm border border-border hover:shadow-md transition-all group"
+                className="bg-white rounded-lg shadow-sm border border-border hover:shadow-[0_0_25px_rgba(64,114,83,0.3)] hover:border-primary/50 active:shadow-[0_0_25px_rgba(64,114,83,0.5)] active:border-primary active:scale-[0.98] transition-all duration-300 group overflow-hidden"
               >
-                <div className="mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {item.image ? (
-                    <img src={item.image} alt={item.title} className="w-20 h-20 object-cover rounded-lg mx-auto shadow-md" />
-                  ) : (
-                    <div className="text-4xl">{item.icon}</div>
-                  )}
-                </div>
-                <h3 className="text-xl font-serif font-bold mb-3 text-foreground">{item.title}</h3>
-                <p className="text-muted-foreground">{item.desc}</p>
+                <Link href={item.link} className="block p-8 w-full h-full cursor-pointer focus:outline-none">
+                  <div className="mb-4 group-hover:scale-110 group-active:scale-110 transition-transform duration-300">
+                    {item.image ? (
+                      <img src={item.image} alt={item.title} className="w-20 h-20 object-cover rounded-lg mx-auto shadow-md" />
+                    ) : (
+                      <div className="text-4xl">{item.icon}</div>
+                    )}
+                  </div>
+                  <h3 className="text-xl font-serif font-bold mb-3 text-foreground group-hover:text-primary group-active:text-primary transition-colors">{item.title}</h3>
+                  <p className="text-muted-foreground">{item.desc}</p>
+                </Link>
               </motion.div>
             ))}
           </div>

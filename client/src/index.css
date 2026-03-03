@@ -37,6 +37,12 @@
 
   --radius: 0.25rem;
 
+  --popover: 0 0% 100%;
+  --popover-foreground: 140 10% 15%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 140 10% 15%;
+
   --font-serif: 'Playfair Display', serif;
   --font-sans: 'DM Sans', sans-serif;
 }

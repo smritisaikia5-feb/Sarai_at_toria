@@ -33,56 +33,79 @@ export function Navigation() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out border-b",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out",
         isSolid
-          ? "bg-background/95 backdrop-blur-md border-border py-4 shadow-sm"
-          : "bg-transparent border-transparent py-6"
+          ? "bg-[#F8F8F6] py-4 shadow-sm"
+          : "bg-transparent py-6"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Logo */}
+        {/* Logo + Branding */}
         <Link href="/" className="z-50">
-          <div className="flex flex-col items-start cursor-pointer group">
-            <span
+          <div className="flex flex-row items-center gap-3 cursor-pointer group">
+            {/* Logo image — visible on all pages except home when not scrolled */}
+            <img
+              src="/images/logo.png"
+              alt="The Sarai at Toria Logo"
               className={cn(
-                "text-2xl font-serif font-bold tracking-tight transition-colors duration-300",
-                isSolid ? "text-primary" : "text-white"
+                "h-14 w-14 object-contain transition-all duration-500",
+                isHome && !isScrolled
+                  ? "opacity-0 w-0 h-0 overflow-hidden pointer-events-none"
+                  : "opacity-100"
               )}
-            >
-              The Sarai at Toria
-            </span>
-            <span
-              className={cn(
-                "text-xs uppercase tracking-[0.2em] font-medium transition-colors duration-300",
-                isSolid ? "text-muted-foreground" : "text-white/80"
-              )}
-            >
-              Luxury Eco Lodge
-            </span>
+            />
+            {/* Branding text */}
+            <div className="flex flex-col items-start">
+              <span
+                className={cn(
+                  "text-xl sm:text-2xl font-serif font-bold tracking-tight transition-colors duration-300",
+                  isSolid ? "text-[#4F735B]" : "text-white"
+                )}
+              >
+                The Sarai at Toria
+              </span>
+              <span
+                className={cn(
+                  "text-[10px] sm:text-xs uppercase tracking-[0.2em] font-medium transition-colors duration-300",
+                  isSolid ? "text-gray-500" : "text-white/80"
+                )}
+              >
+                Luxury Eco Lodge
+              </span>
+            </div>
           </div>
         </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href}>
-              <span
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-accent cursor-pointer relative group py-2",
-                  isSolid ? "text-foreground" : "text-white/90 hover:text-white"
-                )}
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-              </span>
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive = location === link.href;
+            return (
+              <Link key={link.href} href={link.href}>
+                <span
+                  className={cn(
+                    "text-[15px] font-medium transition-colors cursor-pointer py-1 border-b-2",
+                    isSolid
+                      ? isActive
+                        ? "text-[#ce7e4a] border-[#ce7e4a]"
+                        : "text-[#404040] hover:text-[#ce7e4a] border-transparent"
+                      : isActive
+                        ? "text-white border-white"
+                        : "text-white/90 hover:text-white border-transparent"
+                  )}
+                >
+                  {link.label}
+                </span>
+              </Link>
+            )
+          })}
           <Link href="/contact">
             <Button
-              variant={isSolid ? "default" : "secondary"}
               className={cn(
-                "ml-4 font-serif italic rounded-none px-8",
-                !isSolid && "bg-white text-primary hover:bg-white/90"
+                "ml-4 font-serif italic rounded-none px-8 py-2 h-auto text-[16px]",
+                isSolid
+                  ? "bg-[#486b59] text-white hover:bg-[#344d40]"
+                  : "bg-white text-[#486b59] hover:bg-white/90"
               )}
             >
               Book Now
@@ -105,23 +128,26 @@ export function Navigation() {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-background border-l-border w-[300px] p-0">
+            <SheetContent side="right" className="bg-[#F8F8F6] border-l-border w-[300px] p-0">
               <div className="flex flex-col h-full pt-20 px-8">
                 <nav className="flex flex-col gap-6">
-                  {NAV_LINKS.map((link) => (
-                    <Link key={link.href} href={link.href}>
-                      <span
-                        className={cn(
-                          "text-xl font-serif cursor-pointer transition-colors hover:text-accent",
-                          location === link.href ? "text-accent" : "text-foreground"
-                        )}
-                      >
-                        {link.label}
-                      </span>
-                    </Link>
-                  ))}
+                  {NAV_LINKS.map((link) => {
+                    const isActive = location === link.href;
+                    return (
+                      <Link key={link.href} href={link.href}>
+                        <span
+                          className={cn(
+                            "text-xl font-serif cursor-pointer transition-colors border-b-2 inline-block pb-1",
+                            isActive ? "text-[#ce7e4a] border-[#ce7e4a]" : "text-foreground border-transparent hover:text-[#ce7e4a]"
+                          )}
+                        >
+                          {link.label}
+                        </span>
+                      </Link>
+                    )
+                  })}
                   <Link href="/contact">
-                    <Button className="mt-8 w-full font-serif italic text-lg py-6">
+                    <Button className="mt-8 w-full bg-[#486b59] text-white hover:bg-[#344d40] font-serif italic text-lg py-6 rounded-none">
                       Book Your Stay
                     </Button>
                   </Link>

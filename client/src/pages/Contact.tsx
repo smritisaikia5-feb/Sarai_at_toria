@@ -2,16 +2,29 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { InquiryForm } from "@/components/InquiryForm";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Contact() {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
-      <div className="pt-32 pb-16 bg-primary text-white container-padding">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-serif mb-6">Contact Us</h1>
-          <p className="text-xl text-white/80">
+
+      {/* Page Header */}
+      <div className="relative h-[60vh] min-h-[500px] flex items-center justify-center mb-16">
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.img
+            src="/images/hero-3.png"
+            alt="Contact Us"
+            initial={{ scale: 1 }}
+            animate={{ scale: 1.15 }}
+            transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+        <div className="relative z-10 text-center text-white px-4">
+          <h1 className="text-5xl md:text-6xl font-serif mb-4">Contact Us</h1>
+          <p className="text-lg md:text-xl max-w-2xl mx-auto text-white/90">
             We'd love to hear from you. Plan your escape to the wild today.
           </p>
         </div>
@@ -26,7 +39,7 @@ export default function Contact() {
               <p className="text-muted-foreground text-lg mb-8">
                 Whether you have questions about our cottages, safaris, or travel logistics, our team is here to help.
               </p>
-              
+
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="bg-secondary p-3 rounded-full text-primary">
@@ -41,7 +54,7 @@ export default function Contact() {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
                   <div className="bg-secondary p-3 rounded-full text-primary">
                     <Phone className="w-6 h-6" />
@@ -65,20 +78,26 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Map Placeholder */}
-            <div className="w-full h-[300px] bg-muted rounded-lg overflow-hidden border border-border shadow-inner relative group">
+            {/* Map Link */}
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=The+Sarai+at+Toria,+Madhya+Pradesh"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full h-[300px] bg-muted rounded-lg overflow-hidden border border-border shadow-inner relative group block"
+            >
               {/* Static Map Image */}
-              <img 
-                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2674&auto=format&fit=crop" 
-                alt="Map Location" 
-                className="w-full h-full object-cover filter grayscale opacity-70 group-hover:grayscale-0 transition-all duration-500"
+              <img
+                src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2674&auto=format&fit=crop"
+                alt="Map Location"
+                className="w-full h-full object-cover filter grayscale opacity-70 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
               />
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="bg-white/90 px-4 py-2 rounded shadow text-sm font-bold text-primary">
+                <span className="bg-white/95 px-6 py-3 rounded-full shadow-lg text-sm font-bold text-primary flex items-center gap-2 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                  <MapPin className="w-4 h-4" />
                   View on Google Maps
                 </span>
               </div>
-            </div>
+            </a>
           </div>
 
           {/* Form */}

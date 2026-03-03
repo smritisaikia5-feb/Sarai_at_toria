@@ -1,25 +1,143 @@
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { useActivities } from "@/hooks/use-content";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { type Activity } from "@shared/schema";
+import { motion, AnimatePresence } from "framer-motion";
+
+function ActivityImage({ activity }: { activity: Activity }) {
+  const images =
+    activity.images && activity.images.length > 0
+      ? activity.images
+      : [activity.imageUrl];
+  const [idx, setIdx] = useState(0);
+  const [direction, setDirection] = useState(1);
+
+  const prev = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setDirection(-1);
+    setIdx((i) => (i - 1 + images.length) % images.length);
+  };
+  const next = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setDirection(1);
+    setIdx((i) => (i + 1) % images.length);
+  };
+
+  const goToDot = (e: React.MouseEvent, i: number) => {
+    e.preventDefault();
+    setDirection(i > idx ? 1 : -1);
+    setIdx(i);
+  };
+
+  return (
+    <div className="relative aspect-[4/3] rounded-lg shadow-xl group border border-border/50" style={{ perspective: "1500px" }}>
+      <AnimatePresence initial={false} custom={direction}>
+        <motion.img
+          key={idx}
+          src={images[idx]}
+          alt={activity.title}
+          custom={direction}
+          variants={{
+            enter: (dir: number) => ({
+              rotateY: dir > 0 ? 90 : -90,
+              transformOrigin: dir > 0 ? "right center" : "left center",
+              opacity: 0,
+            }),
+            center: (dir: number) => ({
+              rotateY: 0,
+              transformOrigin: dir > 0 ? "right center" : "left center",
+              opacity: 1,
+            }),
+            exit: (dir: number) => ({
+              rotateY: dir > 0 ? -90 : 90,
+              transformOrigin: dir > 0 ? "left center" : "right center",
+              opacity: 0,
+              position: "absolute" as any,
+            }),
+          }}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.7, ease: "easeInOut" }}
+          className="absolute inset-0 w-full h-full object-cover rounded-lg"
+          style={{ backfaceVisibility: "hidden" }}
+        />
+      </AnimatePresence>
+      <div className="absolute inset-0 border-[1px] border-white/20 m-4 rounded-sm pointer-events-none" />
+
+      {images.length > 1 && (
+        <>
+          {/* Prev / Next */}
+          <button
+            onClick={prev}
+            className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full w-9 h-9 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+            aria-label="Previous"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={next}
+            className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white rounded-full w-9 h-9 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+            aria-label="Next"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          {/* Dots */}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => goToDot(e, i)}
+                className={cn(
+                  "rounded-full transition-all",
+                  i === idx ? "w-5 h-2 bg-white" : "w-2 h-2 bg-white/50 hover:bg-white/80"
+                )}
+                aria-label={`Slide ${i + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 export default function Experiences() {
   const { data: activities, isLoading } = useActivities();
 
+  useEffect(() => {
+    if (!isLoading && window.location.hash) {
+      const id = window.location.hash.substring(1);
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          const yOffset = -100; // Account for fixed navigation
+          const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 150);
+    }
+  }, [isLoading]);
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       {/* Page Header */}
       <div className="relative h-[60vh] min-h-[500px] flex items-center justify-center">
-        <div className="absolute inset-0">
-          {/* Unsplash: 'jeep safari' */}
-          <img 
-            src="https://images.unsplash.com/photo-1534177616072-ef7dc12044f9?q=80&w=2670&auto=format&fit=crop" 
-            alt="Experiences Header" 
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.img
+            src="/images/panna_jungle1.jpg"
+            alt="Experiences in Panna"
+            initial={{ scale: 1 }}
+            animate={{ scale: 1.15 }}
+            transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40" />
@@ -41,22 +159,16 @@ export default function Experiences() {
           ) : (
             <div className="space-y-24">
               {activities?.map((activity, index) => (
-                <div 
-                  key={activity.id} 
+                <div
+                  key={activity.id}
+                  id={activity.title.toLowerCase().replace(/\s+/g, '-')}
                   className={cn(
                     "flex flex-col md:flex-row gap-12 lg:gap-20 items-center",
                     index % 2 === 1 && "md:flex-row-reverse"
                   )}
                 >
                   <div className="w-full md:w-1/2">
-                    <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-xl group">
-                      <img 
-                        src={activity.imageUrl} 
-                        alt={activity.title} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 border-[1px] border-white/20 m-4 rounded-sm" />
-                    </div>
+                    <ActivityImage activity={activity} />
                   </div>
                   <div className="w-full md:w-1/2">
                     <h3 className="text-3xl lg:text-4xl font-serif mb-6 text-primary">{activity.title}</h3>

@@ -9,6 +9,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-6">
             <div>
+              <img src="/images/logo.png" alt="The Sarai at Toria Logo" className="h-16 w-auto mb-4 brightness-0 invert opacity-90" />
               <h3 className="text-2xl font-serif font-bold">The Sarai at Toria</h3>
               <p className="text-sm text-primary-foreground/70 uppercase tracking-widest mt-1">Luxury Eco Lodge</p>
             </div>
@@ -16,14 +17,11 @@ export function Footer() {
               A riverside sanctuary blending luxury with sustainability. Experience the wild heart of India in harmony with nature.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="p-2 bg-white/10 rounded-full hover:bg-accent transition-colors">
+              <a href="https://www.instagram.com/saraiattoria/" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-full hover:bg-accent transition-colors">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="#" className="p-2 bg-white/10 rounded-full hover:bg-accent transition-colors">
+              <a href="https://www.facebook.com/saraiattoria#" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-full hover:bg-accent transition-colors">
                 <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="p-2 bg-white/10 rounded-full hover:bg-accent transition-colors">
-                <Twitter className="w-5 h-5" />
               </a>
             </div>
           </div>
@@ -37,7 +35,6 @@ export function Footer() {
                 { label: "Accommodation", href: "/accommodation" },
                 { label: "Experiences", href: "/experiences" },
                 { label: "Dining", href: "/dining" },
-                { label: "Gallery", href: "/gallery" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link href={link.href}>
@@ -73,31 +70,37 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter (Visual only) */}
+          {/* Legal Links */}
           <div>
-            <h4 className="font-serif text-lg mb-6">Newsletter</h4>
-            <p className="text-primary-foreground/80 mb-4">
-              Subscribe to receive updates and special offers.
-            </p>
-            <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-              <input 
-                type="email" 
-                placeholder="Your email address" 
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded focus:outline-none focus:border-accent text-white placeholder:text-white/50"
-              />
-              <button className="w-full px-4 py-3 bg-accent text-white font-medium rounded hover:bg-accent/90 transition-colors">
-                Subscribe
-              </button>
-            </form>
+            <h4 className="font-serif text-lg mb-6">Legal</h4>
+            <ul className="space-y-4">
+              <li>
+                <Link href="/privacy-policy">
+                  <span className="text-primary-foreground/70 hover:text-accent transition-colors cursor-pointer block">
+                    Privacy Policy
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms-conditions">
+                  <span className="text-primary-foreground/70 hover:text-accent transition-colors cursor-pointer block">
+                    Terms & Conditions
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/cancellation-policy">
+                  <span className="text-primary-foreground/70 hover:text-accent transition-colors cursor-pointer block">
+                    Cancellation Policy
+                  </span>
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-primary-foreground/50">
+        <div className="pt-8 border-t border-white/10 flex justify-center items-center text-sm text-primary-foreground/50 text-center">
           <p>© {new Date().getFullYear()} The Sarai at Toria. All rights reserved.</p>
-          <div className="flex gap-6">
-            <span className="cursor-pointer hover:text-white">Privacy Policy</span>
-            <span className="cursor-pointer hover:text-white">Terms of Service</span>
-          </div>
         </div>
       </div>
     </footer>
