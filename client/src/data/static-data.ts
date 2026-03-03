@@ -82,8 +82,15 @@ export const STATIC_COTTAGES = [
             "Our standalone cottages are designed with mud walls and thatched roofs, providing natural insulation and a rustic charm. Each cottage features a private verandah overlooking the grasslands.",
         price: 12000,
         capacity: 2,
-        imageUrl: "/images/classic_cottages-03.jpg",
-        images: ["/images/classic_cottages-03.jpg", "/images/classic_cottages-04.jpg"],
+        imageUrl: "/images/our room 2.jpg",
+        images: [
+            "/images/our room 2.jpg",
+            "/images/our room 3.jpg",
+            "/images/our room 4.jpg",
+            "/images/Our room 1.jpg",
+            "/images/classic_cottages-03.jpg",
+            "/images/classic_cottages-04.jpg",
+        ],
         features: ["King size bed", "Private verandah", "Attached stone bathroom", "Solar powered", "Fan cooled"],
     },
     {
@@ -95,7 +102,12 @@ export const STATIC_COTTAGES = [
         price: 15000,
         capacity: 4,
         imageUrl: "/images/mezzanine_cottages-04.jpg",
-        images: ["/images/mezzanine_cottages-04.jpg", "/images/mezzanine_cottages-01.jpg", "/images/mezzanine_cottages-02.jpg", "/images/mezzanine_cottage_03.png"],
+        images: [
+            "/images/mezzanine_cottages-04.jpg",
+            "/images/mezzanine_cottages-01.jpg",
+            "/images/mezzanine_cottages-02.jpg",
+            "/images/mezzanine_cottage_03.png",
+        ],
         features: ["King size bed", "Loft with twin beds", "Large verandah", "River view", "Spacious bathroom"],
     },
 ];
