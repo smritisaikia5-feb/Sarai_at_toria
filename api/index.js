@@ -1,4 +1,3 @@
-// Vercel serverless function wrapper
-const handler = require('../dist/index.cjs');
+import app from '../dist/index.cjs';
 
-module.exports = handler;
+export default app;
