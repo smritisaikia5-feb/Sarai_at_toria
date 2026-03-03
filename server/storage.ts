@@ -14,6 +14,9 @@ export interface IStorage {
   getCottage(id: number): Promise<Cottage | undefined>;
   createCottage(cottage: InsertCottage): Promise<Cottage>;
 
+  // Clear static content (Cottages/Activities)
+  clearStaticContent(): Promise<void>;
+
   // Activities
   getActivities(): Promise<Activity[]>;
   createActivity(activity: InsertActivity): Promise<Activity>;
@@ -27,6 +30,11 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
+  async clearStaticContent(): Promise<void> {
+    await db.delete(cottages);
+    await db.delete(activities);
+  }
+
   async getCottages(): Promise<Cottage[]> {
     return await db.select().from(cottages);
   }
@@ -86,6 +94,13 @@ export class MemStorage implements IStorage {
     this.currentTestimonialId = 1;
   }
 
+  async clearStaticContent(): Promise<void> {
+    this.cottages.clear();
+    this.activities.clear();
+    this.currentCottageId = 1;
+    this.currentActivityId = 1;
+  }
+
   async getCottages(): Promise<Cottage[]> {
     return Array.from(this.cottages.values());
   }
@@ -96,7 +111,12 @@ export class MemStorage implements IStorage {
 
   async createCottage(insertCottage: InsertCottage): Promise<Cottage> {
     const id = this.currentCottageId++;
-    const cottage: Cottage = { ...insertCottage, id };
+    const cottage: Cottage = {
+      ...insertCottage,
+      id,
+      images: insertCottage.images ?? null,
+      features: insertCottage.features ?? null
+    };
     this.cottages.set(id, cottage);
     return cottage;
   }
@@ -107,14 +127,26 @@ export class MemStorage implements IStorage {
 
   async createActivity(insertActivity: InsertActivity): Promise<Activity> {
     const id = this.currentActivityId++;
-    const activity: Activity = { ...insertActivity, id };
+    const activity: Activity = {
+      ...insertActivity,
+      id,
+      images: insertActivity.images ?? null
+    };
     this.activities.set(id, activity);
     return activity;
   }
 
   async createInquiry(insertInquiry: InsertInquiry): Promise<Inquiry> {
     const id = this.currentInquiryId++;
-    const inquiry: Inquiry = { ...insertInquiry, id, createdAt: new Date() };
+    const inquiry: Inquiry = {
+      ...insertInquiry,
+      id,
+      createdAt: new Date(),
+      phone: insertInquiry.phone ?? null,
+      checkIn: insertInquiry.checkIn ?? null,
+      checkOut: insertInquiry.checkOut ?? null,
+      guests: insertInquiry.guests ?? null
+    };
     this.inquiries.set(id, inquiry);
     return inquiry;
   }
@@ -125,7 +157,12 @@ export class MemStorage implements IStorage {
 
   async createTestimonial(insertTestimonial: InsertTestimonial): Promise<Testimonial> {
     const id = this.currentTestimonialId++;
-    const testimonial: Testimonial = { ...insertTestimonial, id };
+    const testimonial: Testimonial = {
+      ...insertTestimonial,
+      id,
+      rating: insertTestimonial.rating ?? null,
+      location: insertTestimonial.location ?? null
+    };
     this.testimonials.set(id, testimonial);
     return testimonial;
   }
