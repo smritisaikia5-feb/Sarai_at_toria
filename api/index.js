@@ -1,3 +1,3 @@
-import app from '../dist/index.cjs';
+import mod from '../dist/index.cjs';
 
-export default app;
+export default mod.default;
