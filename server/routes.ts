@@ -4,10 +4,10 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 
-export async function registerRoutes(
+export function registerRoutes(
   httpServer: Server,
   app: Express
-): Promise<Server> {
+): Server {
   // --- Cottages ---
   app.get(api.cottages.list.path, async (_req, res) => {
     const cottages = await storage.getCottages();
@@ -50,8 +50,8 @@ export async function registerRoutes(
     }
   });
 
-  // --- Seed Data ---
-  await seedDatabase();
+  // --- Seed Data (Runs asynchronously in background) ---
+  seedDatabase().catch(console.error);
 
   return httpServer;
 }
