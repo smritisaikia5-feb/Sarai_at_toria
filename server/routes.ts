@@ -4,17 +4,25 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 
+let seedPromise: Promise<void> | null = null;
+
 export function registerRoutes(
   httpServer: Server,
   app: Express
 ): Server {
+  if (!seedPromise) {
+    seedPromise = seedDatabase().catch(console.error) as Promise<void>;
+  }
+
   // --- Cottages ---
   app.get(api.cottages.list.path, async (_req, res) => {
+    await seedPromise;
     const cottages = await storage.getCottages();
     res.json(cottages);
   });
 
   app.get(api.cottages.get.path, async (req, res) => {
+    await seedPromise;
     const id = Number(req.params.id);
     const cottage = await storage.getCottage(id);
     if (!cottage) {
@@ -25,18 +33,21 @@ export function registerRoutes(
 
   // --- Activities ---
   app.get(api.activities.list.path, async (_req, res) => {
+    await seedPromise;
     const activities = await storage.getActivities();
     res.json(activities);
   });
 
   // --- Testimonials ---
   app.get(api.testimonials.list.path, async (_req, res) => {
+    await seedPromise;
     const testimonials = await storage.getTestimonials();
     res.json(testimonials);
   });
 
   // --- Inquiries ---
   app.post(api.inquiries.create.path, async (req, res) => {
+    await seedPromise;
     try {
       const input = api.inquiries.create.input.parse(req.body);
       await storage.createInquiry(input);
@@ -49,9 +60,6 @@ export function registerRoutes(
       res.status(500).json({ message: "Internal server error" });
     }
   });
-
-  // --- Seed Data (Runs asynchronously in background) ---
-  seedDatabase().catch(console.error);
 
   return httpServer;
 }
